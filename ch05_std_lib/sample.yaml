@@ -1,0 +1,18 @@
+# ================================================================
+# Sample YAML content
+# ================================================================
+name: sample-yaml-environment
+
+debug: false               # becomes a boolean False
+
+dependencies:              # becomes a list
+  -                        # becomes None
+  -  null                  # becomes None
+  - python: 3.11           # treated as a dictionary
+  - numpy
+  - pandas
+  - matplotlib
+  - pandas
+  - requests=2.27.1        # all treated as a string
+
+versions: [3.8, 3.9, 3.10, 3.11]
