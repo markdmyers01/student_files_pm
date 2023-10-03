@@ -22,7 +22,7 @@ class WordCounter:
         self.max_results = max_results
         self.encoding = encoding
 
-    # Step 1. Add a property decorator here
+    @property
     def results(self):
         self.word_dict.clear()
         with open(self.filepath, encoding=self.encoding) as f:
@@ -35,11 +35,17 @@ class WordCounter:
         sorted_dict_items = sorted(self.word_dict.items(), key=lambda kv: kv[1], reverse=True)
         return sorted_dict_items[:self.max_results]
 
-    # Step 2. Add a min_wordsize getter (decorator + getter function)
+    @property
+    def min_wordsize(self):
+        return self._min_wordsize
 
-    # Step 3. Add a min_wordsize setter (decorator + setter function)
-    #         Ensure that min_wordsize can't be less than 1.  That's it--test it out!
+    @min_wordsize.setter
+    def min_wordsize(self, wordsize):
+        self._min_wordsize = wordsize
+        if self._min_wordsize <= 0:
+            self._min_wordsize = 1
 
 sample_file = '../resources/gettysburg.txt'
-counter = WordCounter(sample_file, min_wordsize=5)
-print(counter.results(), counter.word_dict)
+counter = WordCounter(sample_file, min_wordsize=-10)
+print(counter.min_wordsize)
+print(counter.results, counter.word_dict)

@@ -8,6 +8,8 @@
 
 def update_values(v1, v2):
     v1 *= 2
+    global values1
+    values1 = v1
     v2 *= 2
 
 

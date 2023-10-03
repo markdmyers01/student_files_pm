@@ -47,4 +47,19 @@ root_directory = '..'
 dst = 'resources/images'
 copied = 0
 dstpath = os.path.abspath(os.path.join(root_directory, dst))
+print(dstpath)
+
+if os.path.exists(dstpath):
+    shutil.rmtree(dstpath)
+
+os.mkdir(dstpath)
+
+for curdir, subdirs, files in os.walk(root_directory):
+    path = os.path.abspath(curdir)
+    if path != dstpath:
+        for filename in files:
+            if filename.lower().endswith('.jpg'):
+                print(f'Found: {filename} in {path}')
+                filepath = os.path.join(path, filename)
+                shutil.copy(filepath, dstpath)
 

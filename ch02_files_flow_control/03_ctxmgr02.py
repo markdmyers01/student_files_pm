@@ -12,6 +12,13 @@ class MyContextManager(object):
     def __exit__(self, typ, value, traceback):
         print('in exit')
 
+    def __str__(self):
+        return 'Some sort of foo'
 
-with MyContextManager() as obj:
-    print(obj)
+
+# with MyContextManager() as obj:
+#     print(obj)
+
+x = MyContextManager()
+x.foo = 'bar'
+print(x)

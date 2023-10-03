@@ -26,6 +26,11 @@ class Contact:
             self._email = email
 
 
+def email_valiate(email):
+    #TODO build some validating
+    return 'proper@email.com'
+
+
 c = Contact('Bob', '123 Main St.', 'bobmail')
 print(f'Bob\'s email: {c.email}')
 c.email = 'bob@yahoo.com'

@@ -45,3 +45,5 @@ def display_records():
 
 change_records()
 display_records()
+
+print(globals())

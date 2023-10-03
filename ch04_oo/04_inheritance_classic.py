@@ -24,6 +24,11 @@ class BusinessContact(Contact):
         self.company = company
         self.position = position
 
+    def __str__(self):
+        contact = Contact.__str__(self)
+        return f'{contact} | email: {self.email}'
+
 
 bc = BusinessContact('John Smith', '123 Main St.', {'work': '(970)322-9088', 'home': '(970)455-2390'})
+bc.email = 'bob@bobmail.com'
 print(bc)

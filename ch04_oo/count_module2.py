@@ -6,6 +6,10 @@
 """
 from collections import defaultdict
 import sys
+from pathlib import Path
+
+p = Path('04_inheritance_classic.py')
+print(p.absolute())
 
 
 class WordCounter:
@@ -33,8 +37,13 @@ if __name__ == '__main__':
     sample_file = '../resources/gettysburg.txt'
     results = []
     counter = WordCounter(sample_file, min_wordsize=5)
+
+    print(counter.word_dict)
     try:
-        print(counter.results(), counter.word_dict)
+        print(counter.results())
+        # print(counter.word_dict)
+        counter.filepath = '../resources/alice.txt'
+        print(counter.results())
     except IOError as err:
         print(f'Error working with file: {err}', file=sys.stderr)
     except UnicodeDecodeError as err:

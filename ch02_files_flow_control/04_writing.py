@@ -4,6 +4,7 @@
     Using a context manager to write to a file.
 
 """
+import os.path
 import sys
 
 data = [
@@ -19,8 +20,11 @@ data = [
 ]
 
 try:
-    with open('data.txt', 'w', encoding='utf-8') as f:
-        for item in data:
-            print(item, file=f)
+    # if os.path.exists('data.txt'):
+    with open('data.txt', encoding='utf-8') as f:
+        x = f.read()
+        print(type(x))
+        # for item in data:
+        #     print(item, file=f)
 except IOError as err:
     print(err, file=sys.stderr)

@@ -6,6 +6,7 @@
 """
 import os
 import time
+import zoneinfo
 
 stats = os.stat('02_os_stat.py')
 print(stats)

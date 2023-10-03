@@ -26,42 +26,49 @@ def salary_sort(sal_record):
     return sal_record.salary
 
 
-# Step 1. Ask user (input) to determine the year to search for.
+year_str = '1985' # input('Enter a year (1985-2016): ')
 
+filepath = os.path.join(working_dir, salaries_filename)
+try:
+    with open(filepath, encoding='utf-8') as f_sal:
+        header = f_sal.readline().strip().split(',')
+        SalaryRecord = namedtuple('SalaryRecord', header)
+        for line in f_sal:
+            data = line.strip().split(',')
+            if year_str == data[0]:
+                try:
+                    data[4] = int(data[4])
+                except ValueError:
+                    data[4] = 0
+                sal_rec = SalaryRecord(*data)
+                salaries.append(sal_rec)
+except IOError as err:
+    print(err, file=sys.stderr)
+    sys.exit()
 
-# Step 2. Join the working_dir and salaries_filename using os.path.join().
-#         Using a with control, open the salary file.
+print(salaries[:5])
 
-#         One approach for reading data is to use the header from the Salaries.csv file.
-#         To do this, you must read the first line from the file, split it, and provide it
-#         to the namedtuple() constructor
+people_filepath = os.path.join(working_dir, people_filename)
+try:
+    with open(people_filepath, encoding='utf-8') as f_people:
+        f_people.readline()
+        for line in f_people:
+            data = line.strip().split(',')
+            player_id, first_name, last_name = data[0], data[13], data[14]
+            players[player_id] = (first_name, last_name)
+except IOError as err:
+    print(err, file=sys.stderr)
+    sys.exit()
 
-#             header = f_sal.readline().split(',')
-#             SalaryRecord = namedtuple('SalaryRecord', header)
+salaries.sort(key=salary_sort, reverse=True)
 
-#         Now in a for loop, read the remaining records from the file
-#         placing each record into a namedtuple.  Append each namedtuple
-#         into the provided salaries list if the year matches
-#         the year requested by the user.
-
-
-# Step 3. Read player records from the people file (People.csv).
-#         Store each record in the provided players dictionary.
-#         Hint:  Use players[playerid] = player_record
-#                where playerid is the first field in each record
-#                      and player_record is the player's data
-
-
-# Step 4. Sort the salaries list by-salary using the provided function above.
-#
-#         Hint: Use  salaries.sort(key=salary_sort)
-
-
-# Step 5. With the salaries list sorted in order by salary, you can get the top
-#         salaries now.  For each salary, you will need to get the playerid
-#         and then use the playerid to access the dictionary to get the player's
-#         first and last name
-
-
-# Step 6. Print the first and last name of each player as well as the salary and year.
-
+how_many = 10
+print_header = ['Name', 'Salary', 'Year']
+print('{0:35}{1:<20}{2:10}'.format(*print_header))
+for salary_record in salaries[:how_many]:
+    player_id = salary_record.playerID
+    (first_name, last_name) = players[player_id]
+    name = first_name + ' ' + last_name
+    salary = f'${salary_record.salary:<19,.2f}'
+    year = salary_record.yearID
+    print(f'{name:35}{salary:<}{year:<10}')

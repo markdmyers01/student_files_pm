@@ -52,4 +52,28 @@
 
           Hint: use slicing to limit the output
 """
+wordcount = {}
 
+for line in open('alice.txt', encoding='utf-8-sig'):
+    words = line.split()
+    for word in words:
+        if word in wordcount:
+            wordcount[word] += 1
+        else:
+            wordcount[word] = 1
+
+print([item for idx, item in enumerate(wordcount.items()) if idx < 5 ])
+
+for idx, item in enumerate(wordcount.items()):
+    print(item)
+    if idx == 4:
+        break
+
+
+sortedwords = sorted(wordcount.items(), key=lambda a : a[1], reverse=True)
+print(sortedwords[: 5])
+
+
+five_letters = [(word, count) for word, count in sortedwords if len(word) >= 5]
+
+print(five_letters[:100])
