@@ -21,7 +21,7 @@ except IOError as err:
     print(err, file=sys.stderr)
 
 try:
-    with open('first100.dat', 'w', encoding='utf8') as f:
+    with open('first100.dat', 'w', encoding='utf8', newline='') as f:
         try:
             csv.writer(f).writerows(airports[1:101])
         except csv.Error as err:

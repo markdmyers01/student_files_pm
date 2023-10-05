@@ -29,8 +29,8 @@ matchobj = re.search('seven', speech)
 print(type(matchobj))
 if matchobj:
     print(f'seven found at position: {matchobj.start()}')
-
-
+    print(matchobj.span())
+    print(speech[matchobj.start():matchobj.end() + 1])
 
 matchobj = re.search(r'(\w+) (\w+) (\w+)', 'Four score and seven years ago')
 print(matchobj.groups())                # ('Four', 'score', 'and')
@@ -38,6 +38,9 @@ print(matchobj.group(0))                # Four score and
 print(matchobj.group(1))                # Four
 print(matchobj.group(2))                # score
 print(matchobj.group(3))                # and
+
+tup = matchobj.groups()
+print(tup[0])
 
 str_matches = re.findall(r'\w+', 'Four score and seven years ago')
 print(f'How many words: {len(str_matches)}')

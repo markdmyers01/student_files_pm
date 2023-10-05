@@ -17,7 +17,7 @@ url403 = 'https://httpbin.org/status/403'
 
 
 try:
-    with urlopen(url200) as f_url:
+    with urlopen(url403) as f_url:
         results = f_url.read().decode('utf-8')
         print(results)
 except HTTPError as err:

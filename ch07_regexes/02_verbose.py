@@ -26,13 +26,15 @@ phones = [
 
 
 valid = [ph for ph in phones if re.match(pattern, ph, re.VERBOSE)]
+print(valid)
+print(f'Valid phones: {valid}')
 print('Valid phones: {0}'.format(valid))
 
 
-newStr = re.sub('seven', 'eight', 'Four score and seven years ago')
+newStr = re.sub('seven', 'eight', 'Four score and seven years ago and in another seven years', count=1)
 print(newStr)
 
-print(re.split(r'\d+', 'hello1234567890world'))
+print(re.split(r'\d+', 'hello123world'))
 
 pattern_obj = re.compile(pattern, re.VERBOSE)
 valid = [ph for ph in phones if pattern_obj.match(ph)]

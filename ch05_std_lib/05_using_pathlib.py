@@ -21,14 +21,18 @@ if working_dir.is_dir():    # check if the Path object is a directory
 
 print()
 print('Get all contents recursively as Path objects (incl. all subdirs)')
-for p in working_dir.glob('**/*'):
+for p in working_dir.glob('**/*.py'):
     print('--> ', p)
 
 print()
 print('Getting only files (as Path objects)...')
 files_only = [p for p in working_dir.iterdir() if p.is_file()]
+print(files_only[:5])
 print([p.name for p in files_only])
 
 print()
 print(f'Reading part of first text file:')
 print(files_only[0].read_text(encoding='utf-8')[:140])
+
+for line in open(files_only[0], encoding='utf8'):
+    print(line)

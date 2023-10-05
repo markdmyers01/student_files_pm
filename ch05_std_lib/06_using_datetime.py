@@ -6,11 +6,17 @@
 """
 
 from datetime import date, datetime
+import zoneinfo
+
+# x = zoneinfo.ZoneInfo
+# print(x.tzname())
 
 
-now1 = datetime.now()      # current date & time
+now1 = datetime.today()      # current date & time
 now2 = date.today()        # current date
 print(now1, now2)
+
+print(now1.tzinfo)
 
 d = date(2023, 2, 17)
 print(d.year, d.month, d.day)

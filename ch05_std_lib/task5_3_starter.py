@@ -13,12 +13,13 @@ import xml.etree.ElementTree as ET
 from xml.etree.ElementTree import ParseError
 
 import requests
+import fontstyle
 
 fields = ['title', 'description', 'pubDate']
 Item = namedtuple('Item', fields)
 
 
-def parse_feed(feed='', use_archived=False):
+def parse_feed(feed='', use_archived=True):
     try:
         if use_archived:
             tree = ET.parse('archived.xml')
@@ -39,21 +40,18 @@ except requests.exceptions.RequestException:
 
 tree = parse_feed(feed)
 
-
-# Step 0. In your browser, type in the url above to view the RSS feed XML structure
-#         (do this if you have internet access, otherwise view archived.xml).
-
-# Step 1. Iterate over each item and extract the title, description, and pubDate fields.  Use tree.findall('.//item')
-#         to iterate over each <item>
-# Example:
-#              for item in tree.findall('.//item'):
-#                  title = item.find('.//title').text
-#                  (repeat for the other two)
 items = []
 
-# Step 2. For each item, place the field value into an Item namedtuple (already created for you above)
-# Step 3. Place the namedtuple into a list (already created for you above)
-#  Example:
-#     items.append(Item(title, description, pubDate))
+for item in tree.findall('.//item'):
+    title = item.find('.//title').text
+    descriptionFull = item.find('.//description').text
+    description = descriptionFull.split('<')[0]
+    pubDateStr = item.find('.//pubDate').text
+    pubDate = datetime.strptime(pubDateStr, '%a, %d %b %Y %H:%M:%S %z')
+    items.append(Item(title, description, pubDate))
 
-# Step 4. Display your results (in a way of your choosing) afterwards
+for item in items:
+    title = fontstyle.apply(f' {item.title} ', 'BOLD/BLACK/Yellow_BG')
+    pub_date = fontstyle.apply(f'({item.pubDate.strftime("%b %d, %Y")})', 'ITALIC/PURPLE')
+
+    print(f'{title} {pub_date}\n\t{item.description[:70]}\n\t{item.description[71:140]}...')

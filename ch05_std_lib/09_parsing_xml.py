@@ -8,7 +8,6 @@ import sys
 from collections import namedtuple
 from xml.etree.ElementTree import ElementTree, ParseError
 
-
 Contact = namedtuple('Contact', 'first last age email')
 try:
     tree = ElementTree().parse('../ch05_std_lib/results.xml')

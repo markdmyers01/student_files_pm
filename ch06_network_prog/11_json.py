@@ -6,7 +6,7 @@
 from collections import namedtuple
 import datetime
 import json
-
+from numbers import Number
 
 # converts a dictionary into JSON format
 obj = {'task': 'run 5 miles', 'goal': 40}
@@ -18,13 +18,14 @@ print(json.dumps(obj, indent=4))
 Contact = namedtuple('Contact', 'first last age email')
 contact = Contact('John',  'Smith',   43, 'jsbrony@yahoo.com')
 print('\nContact namedtuple is converted to a JSON string:')
+print(contact._asdict())
 print(json.dumps(contact._asdict(), indent=4))
 
 
 # converts JSON string into Python objects (dictionaries)
 print('\nJSON string converted to a dict:')
 new_obj = json.loads('{"first": "John","last": "Smith","age": 43,"email": "jsbrony@yahoo.com"}')
-print(new_obj)
+print(type(new_obj))
 
 
 # Class objects converted to JSON
@@ -39,7 +40,9 @@ class Player:
 print('\nA Player object is converted to JSON:')
 p1 = Player('John', 'Smith', 30000000, 1985)
 print(json.dumps(p1, default=lambda player: player.__dict__))
-
+p1_dict = p1.__dict__
+print(p1_dict)
+print(json.dumps(p1_dict, indent=4))
 
 # what about non-serializable fields such as birthdate???
 class Player2:
@@ -67,6 +70,8 @@ class PlayerEncoder(json.JSONEncoder):
         except (AttributeError, TypeError):
             if isinstance(obj, datetime.date):
                 result = obj.isoformat()
+            if isinstance(obj, Number):
+                result = float(obj)
             else:
                 result = 'unable to determine'
 

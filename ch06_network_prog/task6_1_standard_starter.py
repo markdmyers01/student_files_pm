@@ -33,51 +33,55 @@ import requests
 base_url = 'https://eonet.gsfc.nasa.gov'
 api_path = '/api/v3/events'
 
+# Step 1
+event_dict = requests.get(f'{base_url}{api_path}').json()
+events = event_dict.get('events', [])
 
-# Step 1. Combine the base_url and api_path.  Make an HTTP GET request to retrieve the
-#         JSON-based data at this URL.  "events" is the top-level property in this JSON data.
-#         Retrieve all the "events" found in the top-level "events" property of the JSON data.
-#         Hint: do this using requests.get(url).json().
-#         In the received dictionary, get all the events from the "events" key.
-
-
-# Step 2. How many events are there?  Hint: Use the len() function on the list of events from step 1.
+# Step 2
+print(f'NASA tracking {len(events)} total events.')
 
 
-# Step 3.  Obtain and display all the different category titles.
-#          Hint: use a set() to store various category titles.
-#          To do this, iterate over all the events, getting each event's "categories".
-#          The "categories" property is a list, so iterate over the categories list also.
-#          (This means we'll need a nested for-loop).  A sample JSON structure is shown below:
-#
-#  { "events": [
-#        { ...
-#          "categories": [
-#              {
-#                "id": "seaLakeIce",
-#                "title": "Sea and Ice Lake"                   <--We want all of these possible values
-#              }
-#          ]
-#        }, ...
-#    ]
-#  }
-#
-all_categories = set()     # use for step 3
-fires = []                 # use for step 4
+# Step 3 & 4
+all_categories = set()
+fires = []
+for event in events:
+    categories = event.get('categories', [])
+    for category in categories:
+        category_title = category.get('title')
+        all_categories.add(category_title)
+        if category_title == 'Wildfires':
+            fires.append(event)
+
+print(f'\nSeveral categories found across all events: {list(all_categories)}')
+print('\nDisplaying fires tracked:')
+print([fire.get("title") for fire in fires][:5])
+
+# Step 5
+first_fire = fires[1]
+name = first_fire.get("title")
+print(f'\nFirst fire listed: {name}')
+sources = first_fire.get('sources')
+if not sources:
+    print(f'No Inciweb URL found for {name}')
+    sys.exit(42)
+
+try:
+    url = sources[0]['url']
+except KeyError:
+    print(f'Latest fire {name} does not yet have a source URL. Try a higher number index')
+    sys.exit(1)
+print(url)
 
 
-# Step 4. Use the fires variable above. Modify the code above to save only the 'Wildfires' event types
-#         Print the names (titles) of all the 'Wildfires' events.  There will be quite a few so you can just
-#         print the list.
+# Step 6
+print(f'Retrieving page for fire at: {url}')
+soup = BeautifulSoup(requests.get(url).text, 'html.parser')
+# selector = '.incident-main-content p'
+selector = '.incident-publication-content'
+# print(soup.select(selector)[0].text)
+# print(soup.select(selector))
+for inci in soup.select(selector):
+    print(inci.text)
 
-
-# Step 5. Select the first fire from the fires in step 4.  Retrieve its associated Inciweb HTML page.
-
-
-# Step 6. Obtain the Incident Overview (description) for the fire source URL identified in step 5 as follows:
-#         First, using the URL from the previous step, retrieve the HTML page with requests.get().text.
-#         Parse the returned HTML (text) using BeautifulSoup.
-#         Then, using the provided selector, issue a soup.select(selector) to get the description.
-
-selector = '.incident-main-content p'
+# print(soup.select(selector)[0].text)
 

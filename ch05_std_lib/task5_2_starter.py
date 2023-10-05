@@ -13,15 +13,16 @@
 from pathlib import Path
 import shutil
 
-# Step 1. Replace root_directory below with a Path() object of the root_directory Path('..') instead
-root_directory = '..'
-
-# Step 2. Replace dst below with a Path() object of the 'resources/images' directory instead
-dst = 'resources/images'
+root_directory = Path('..')
+dst = root_directory / 'resources/images'
 copied = 0
 
-# Step 3. Iterate the root_directory using either rglob() or glob('**/*.jpg')
-# Step 4. Within a try-except block that handles SameFileErrror exceptions, perform a
-#         shutil.copy()
+for pathitem in root_directory.glob('**/*.jpg'):
+    try:
+        shutil.copy(pathitem, dst)
+        print(f'Match: {pathitem}. Copying...')
+        copied += 1
+    except shutil.SameFileError as err:
+        pass
 
-# Optionally, count the number of copies made, display the copied files count.
+print(f'Copied: {copied} files to dstpath')
